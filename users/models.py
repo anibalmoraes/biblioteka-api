@@ -3,8 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class UserType(models.TextChoices):
-    DEFAULT = "student"
-    COLLABORATOR = "collaborator"
+    DEFAULT = "Estudante"
+    COLLABORATOR = "Colaborador"
 
 
 class User(AbstractUser):
