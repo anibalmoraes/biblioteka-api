@@ -8,7 +8,7 @@ class Copy(models.Model):
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="copies")
 
-    loan = models.ManyToManyField(User, through="Loan", related_name=...)
+    copy_users = models.ManyToManyField(User, through="Loan", related_name="copy_users")
 
     def __repr__(self) -> str:
         return f"<Copy ({self.quantity})>"
@@ -19,8 +19,8 @@ class Loan(models.Model):
     estimated_return = models.DateField(default=None)
     devolution_date = models.DateField(default=None)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="loan")
-    copy = models.ForeignKey(Copy, on_delete=models.CASCADE, related_name="loan")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    copy = models.ForeignKey(Copy, on_delete=models.CASCADE)
 
     def __repr__(self) -> str:
         return f"<Loan ({self.borrow_date})>"
