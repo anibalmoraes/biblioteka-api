@@ -23,7 +23,7 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     created_at = models.DateField(auto_now_add=True)
 
-    following = models.ManyToManyField(User, related_name="follow")
+    following = models.ManyToManyField(User, related_name="followers")
 
     def __repr__(self) -> str:
         return f"<Book ({self.title} - {self.author} - {self.genre})>"
