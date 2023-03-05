@@ -21,7 +21,7 @@ class Copy(models.Model):
 class Loan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     borrow_date = models.DateField(auto_now_add=True)
-    estimated_return = models.DateField(default=borrow_date + datetime.timedelta(days=30))
+    estimated_return = models.DateField(default=datetime.date.today() + datetime.timedelta(days=30))
     devolution_date = models.DateField(default=None)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
