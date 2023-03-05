@@ -8,7 +8,7 @@ class Copy(models.Model):
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="copies")
 
-    copy_users = models.ManyToManyField(User, through="Loan", related_name="copy_users")
+    copies_users = models.ManyToManyField(User, through="Loan", related_name="copies_users")
 
     def __repr__(self) -> str:
         return f"<Copy ({self.quantity})>"

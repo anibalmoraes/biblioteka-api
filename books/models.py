@@ -8,8 +8,8 @@ class Genre(models.TextChoices):
     FICTION = ("Ficção",)
     NON_FICTION = ("Não Ficção",)
     KIDS = ("Infantil",)
-    TERROR = ("Terror",)
-    SUSPENSE = ("Suspense",)
+    HORROR = ("Terror",)
+    TRILLER = ("Suspense",)
     ACTION_ADVENTURE = "Ação e aventura"
 
 

@@ -10,6 +10,7 @@ class UserType(models.TextChoices):
 class User(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=127, unique=True)
     user_type = models.CharField(
         max_length=20,
         default=UserType.DEFAULT,
