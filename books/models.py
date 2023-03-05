@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from uuid import uuid4
 
 
 class Genre(models.TextChoices):
@@ -14,6 +15,7 @@ class Genre(models.TextChoices):
 
 
 class Book(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=150)
     pages = models.PositiveSmallIntegerField()
     is_available = models.BooleanField(default=True)
