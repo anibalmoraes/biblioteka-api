@@ -2,8 +2,12 @@ from django.db import models
 from books.models import Book
 from users.models import User
 
+import datetime
+from uuid import uuid4
+
 
 class Copy(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     quantity = models.PositiveSmallIntegerField()
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="copies")
@@ -15,8 +19,9 @@ class Copy(models.Model):
 
 
 class Loan(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     borrow_date = models.DateField(auto_now_add=True)
-    estimated_return = models.DateField(default=None)
+    estimated_return = models.DateField(default=datetime.date.today() + datetime.timedelta(days=30))
     devolution_date = models.DateField(default=None)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
