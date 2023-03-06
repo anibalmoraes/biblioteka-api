@@ -14,10 +14,9 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=127, unique=True)
     user_type = models.CharField(
-        max_length=20,
-        default=UserType.DEFAULT,
-        choices=UserType.choices
+        max_length=20, default=UserType.DEFAULT, choices=UserType.choices
     )
+    is_active = models.BooleanField(default=True)
     is_blocked = models.BooleanField(default=False)
 
     def __repr__(self) -> str:
