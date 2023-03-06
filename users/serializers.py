@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from .models import User, UserType
+import ipdb
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
+            "username",
             "email",
             "password",
             "first_name",
@@ -37,4 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data: dict) -> User:
+        if validated_data["user_type"] == "Colaborador":
+            return User.objects.create_superuser(**validated_data)
+
         return User.objects.create_user(**validated_data)
