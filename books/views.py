@@ -14,4 +14,5 @@ class BookView(ListCreateAPIView, PageNumberPagination):
 
 
 class BookDetailView(RetrieveUpdateDestroyAPIView):
-    ...
+    serializer_class = BookSerializer
+    queryset = Book.objects.all()
