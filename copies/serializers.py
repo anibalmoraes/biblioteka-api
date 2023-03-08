@@ -4,13 +4,26 @@ from .models import Copy, Loan
 
 
 class CopySerializer(serializers.ModelSerializer):
+    book = serializers.SerializerMethodField()
+
     class Meta:
         model = Copy
-        fields = ["id", "quantity"]
+        fields = ["id", "quantity","book"]
         read_only_fields = ["id"]
-
+    
     def create(self, validated_data: dict) -> Copy:
         return Copy.objects.create(**validated_data)
+
+    def get_book(self, obj: Copy):
+        return obj.book.title
+
+    def update(self, instance: Copy, validated_data: dict) -> Copy:
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance
 
 
 class LoanSerializer(serializers.ModelSerializer):
