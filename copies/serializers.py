@@ -25,6 +25,7 @@ class CopySerializer(serializers.ModelSerializer):
 
         return instance
 
+
 class LoanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan

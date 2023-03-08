@@ -1,13 +1,13 @@
 from .models import Copy
 from books.models import Book
 from .serializers import CopySerializer
-from rest_framework import generics
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 
-class CopyCreateView(generics.CreateAPIView):
+class CopyCreateView(CreateAPIView):
     queryset = Copy.objects.all()
     serializer_class = CopySerializer
 
@@ -18,11 +18,11 @@ class CopyCreateView(generics.CreateAPIView):
         return serializer.save(book=book)
 
 
-class CopyView(generics.ListAPIView):
+class CopyView(ListAPIView):
     queryset = Copy.objects.all()
     serializer_class = CopySerializer
 
 
-class CopyDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CopyDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Copy.objects.all()
     serializer_class = CopySerializer
