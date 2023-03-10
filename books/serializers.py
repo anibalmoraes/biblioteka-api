@@ -37,11 +37,11 @@ class BookSerializer(serializers.ModelSerializer):
                 copy.quantity += 1
                 copy.save()
             return existing_book
-        else:
-            new_book = Book.objects.create(**validated_data)
-            Copy.objects.create(book=new_book, quantity=1)
+        
+        new_book = Book.objects.create(**validated_data)
+        Copy.objects.create(book=new_book, quantity=0)
 
-            return new_book
+        return new_book
 
     def update(self, instance: Book, validated_data: dict) -> Book:
         for key, value in validated_data.items():
