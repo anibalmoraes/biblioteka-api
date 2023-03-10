@@ -18,3 +18,4 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
         instance.is_active = False
 
         instance.save()
+    
