@@ -4,7 +4,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Book
 from .serializers import BookSerializer
-from .permissions import IsAdminOrReadOnly, IsAdminOrReadOnly2
+from .permissions import IsAdminOrReadOnly
 
 
 class BookView(ListCreateAPIView, PageNumberPagination):
@@ -20,7 +20,7 @@ class BookView(ListCreateAPIView, PageNumberPagination):
 
 class BookDetailView(RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminOrReadOnly2]
+    permission_classes = [IsAdminOrReadOnly]
 
     serializer_class = BookSerializer
     queryset = Book.objects.all()

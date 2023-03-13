@@ -9,12 +9,3 @@ class IsAdminOrReadOnly(permissions.BasePermission):
             or request.user.is_authenticated
             and request.user.is_superuser
         )
-
-
-class IsAdminOrReadOnly2(permissions.BasePermission):
-    def has_permission(self, request: Request, view: View):
-        return (
-            request.method in permissions.SAFE_METHODS
-            and request.user.is_authenticated
-            or (request.user.is_authenticated and request.user.is_superuser)
-        )
