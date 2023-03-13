@@ -2,7 +2,11 @@ from .models import Copy
 from books.models import Book
 from books.permissions import IsAdminOrReadOnly
 from .serializers import CopySerializer
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    ListAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
@@ -25,14 +29,14 @@ class CopyCreateView(CreateAPIView):
 class CopyView(ListAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminOrReadOnly]
-    
+
     queryset = Copy.objects.all()
     serializer_class = CopySerializer
 
 
 class CopyDetailView(RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [ IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
     queryset = Copy.objects.all()
     serializer_class = CopySerializer
