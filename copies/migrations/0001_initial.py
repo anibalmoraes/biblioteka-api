@@ -7,7 +7,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
@@ -27,31 +26,5 @@ class Migration(migrations.Migration):
                 ),
                 ("quantity", models.PositiveSmallIntegerField()),
             ],
-        ),
-        migrations.CreateModel(
-            name="Loan",
-            fields=[
-                (
-                    "id",
-                    models.UUIDField(
-                        default=uuid.uuid4,
-                        editable=False,
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-                ("borrow_date", models.DateField(auto_now_add=True)),
-                (
-                    "estimated_return",
-                    models.DateField(default=datetime.date(2023, 4, 4)),
-                ),
-                ("devolution_date", models.DateField(default=None)),
-                (
-                    "copy",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="copies.copy"
-                    ),
-                ),
-            ],
-        ),
+        )
     ]
