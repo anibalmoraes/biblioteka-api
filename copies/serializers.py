@@ -18,7 +18,7 @@ class CopySerializer(serializers.ModelSerializer):
             copy.save()
 
             return copy
-        
+
         return Copy.objects.create(**validated_data)
 
     def get_book(self, obj: Copy):
