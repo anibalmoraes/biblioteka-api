@@ -51,4 +51,4 @@ class LoansDetailView(RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         serializer.save()
 
-    lookup_url_kwarg = "user_id"
+    lookup_url_kwarg = "loan_id"
