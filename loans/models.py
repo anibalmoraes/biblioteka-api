@@ -8,7 +8,7 @@ class Loan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     borrow_date = models.DateField(auto_now_add=True)
     estimated_return = models.DateField(default=date.today() + timedelta(days=15))
-    devolution_date = models.DateField(date.strftime("%Y-%m-%d"), null=True)
+    devolution_date = models.DateField(date.strftime("%Y-%m-%d"), blank=True, null=True)
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,

@@ -5,12 +5,12 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from .models import Loan
 from .serializers import LoanSerializer
-from .permissions import IsBlocked, IsActive, IsAccountOwner, IsAdmin, IsAdminOrReadOnly
+from .permissions import IsBlocked, IsActive, IsAccountOwner, IsAdmin, IsAdminOrReadOnly, IsDependecies
 
 
 class LoansView(ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsAdminOrReadOnly, IsActive]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly, IsActive, IsBlocked, IsDependecies]
 
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer

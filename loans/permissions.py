@@ -3,9 +3,11 @@ from users.models import User
 from rest_framework.views import View, Request
 
 
-# class IsBlocked(permissions.BasePermission):
-#     def has_permission(self, request, view: View) -> bool:
-#         return request.user.is_blocked == False
+class IsBlocked(permissions.BasePermission):
+    def has_permission(self, request, view: View) -> bool:
+        user_not_Is_Blocked = not request.user.is_blocked
+        return user_not_Is_Blocked or request.user.is_superuser
+
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request: Request, view: View):
@@ -29,3 +31,9 @@ class IsAccountOwner(permissions.BasePermission):
 class IsAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj == request.user.is_superuser
+
+
+class IsDependecies(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        user_not_Is_Blocked = not request.user.user_loans.all()
+        return user_not_Is_Blocked or obj == request.user
