@@ -18,7 +18,7 @@ class CopySerializer(serializers.ModelSerializer):
             copy.save()
 
             return copy
-        
+
         return Copy.objects.create(**validated_data)
 
     def get_book(self, obj: Copy):
@@ -33,16 +33,16 @@ class CopySerializer(serializers.ModelSerializer):
         return instance
 
 
-class LoanSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Loan
-        fields = [
-            "id",
-            "borrow_date",
-            "estimated_return",
-            "devolution_date"
-        ]
-        read_only_fields = ["id", "estimated_return"]
+# class LoanSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Loan
+#         fields = [
+#             "id",
+#             "borrow_date",
+#             "estimated_return",
+#             "devolution_date"
+#         ]
+#         read_only_fields = ["id", "estimated_return"]
 
-    def create(self, validated_data: dict) -> Loan:
-        return Loan.objects.create(**validated_data)
+#     def create(self, validated_data: dict) -> Loan:
+#         return Loan.objects.create(**validated_data)

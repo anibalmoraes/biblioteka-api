@@ -53,6 +53,7 @@ MY_APPS = [
     "books",
     "copies",
     "users",
+    "loans",
 ]
 
 THIRD_PARTY_APPS = [
