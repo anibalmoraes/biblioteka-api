@@ -3,6 +3,11 @@ from users.models import User
 from uuid import uuid4
 
 
+class Available(models.TextChoices):
+    DEFAULT = "Disponível"
+    INDISPONIVEL = "Indisponível"
+
+
 class Genre(models.TextChoices):
     DRAMA = ("Drama",)
     ROMANCE = ("Romance",)
@@ -18,7 +23,9 @@ class Book(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=150)
     pages = models.PositiveSmallIntegerField()
-    is_available = models.BooleanField(default=True)
+    is_available = models.CharField(
+        max_length=20, choices=Available.choices, default=Available.DEFAULT
+    )
     genre = models.CharField(max_length=30, choices=Genre.choices)
     description = models.TextField()
     published_at = models.PositiveSmallIntegerField()
