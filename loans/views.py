@@ -1,22 +1,17 @@
 from django.shortcuts import render
-from rest_framework.views import View, Request, Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
-    RetrieveUpdateAPIView
 )
 from .models import Loan
 from .serializers import LoanSerializer
 from .permissions import (
     IsBlocked,
     IsActive,
-    IsAccountOwner,
-    IsAdmin,
     IsAdminOrReadOnly,
-    IsDependecies,
 )
 from copies.models import Copy
 from django.shortcuts import get_object_or_404, get_list_or_404
@@ -33,6 +28,7 @@ class LoansView(ListCreateAPIView):
         if self.request.user.is_superuser:
             return Loan.objects.filter(is_active=True, user_id=self.kwargs["copy_id"])
         return Loan.objects.filter(is_active=True, user_id=self.request.user)
+
     serializer_class = LoanSerializer
 
     def perform_create(self, serializer: LoanSerializer, **kwargs):
@@ -42,9 +38,9 @@ class LoansView(ListCreateAPIView):
         if not user.while_blocked:
             user.while_blocked = date(1930, 1, 1)
         if user.is_blocked or date.today() <= user.while_blocked:
-            blok_error = APIException("Usário bloqueado!")
-            blok_error.status_code = 403
-            raise blok_error
+            block_error = APIException("Usuário bloqueado!")
+            block_error.status_code = 403
+            raise block_error
         serializer.save(copy=copy, user=user)
 
     lookup_url_kwarg = "copy_id"
