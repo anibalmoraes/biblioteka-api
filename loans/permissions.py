@@ -24,7 +24,7 @@ class IsActive(permissions.BasePermission):
 
 
 class IsAccountOwner(permissions.BasePermission):
-    def has_object_permission(self, request, view: View, obj: User) -> bool:
+    def has_object_permission(self, request, view: View, obj) -> bool:
         return obj == request.user or request.user.is_superuser
 
 
