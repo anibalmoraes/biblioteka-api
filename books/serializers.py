@@ -6,7 +6,6 @@ from copies.models import Copy
 from django.db.models import Sum
 from django.core.mail import send_mail
 from django.conf import settings
-import ipdb
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -25,9 +24,11 @@ class BookSerializer(serializers.ModelSerializer):
             "published_at",
             "is_available",
             "created_at",
+            "following",
             "quantity",
         ]
-        read_only_fields = ["created_at", "id"]
+        read_only_fields = ["created_at", "id", "following"]
+        depth = 1
 
     def create(self, validated_data: dict) -> Book:
         existing_book = Book.objects.filter(
@@ -87,14 +88,3 @@ class FollowingSerializer(serializers.Serializer):
             )
 
         return book
-
-
-class FollowersSerializer(serializers.Serializer):
-    id = serializers.CharField(read_only=True)
-    followers = serializers.CharField(read_only=True)
-    book_id = serializers.CharField(read_only=True)
-
-    def get_followers(self, obj: User):
-        print("chegou")
-
-        return obj.followers.all().values("username")
