@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
 from .models import Book, Genre
+from users.models import User
 from copies.models import Copy
 from django.db.models import Sum
 from django.core.mail import send_mail
 from django.conf import settings
+import ipdb
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -60,7 +62,11 @@ class BookSerializer(serializers.ModelSerializer):
 class FollowingSerializer(serializers.Serializer):
     id = serializers.CharField(read_only=True)
     user_id = serializers.CharField(read_only=True)
+    username = serializers.SerializerMethodField()
     book_id = serializers.CharField(read_only=True)
+
+    def get_username(self, obj: Book):
+        return obj.following.all().values("username")
 
     def create(self, validated_data):
         book = validated_data["book_id"]
@@ -81,3 +87,14 @@ class FollowingSerializer(serializers.Serializer):
             )
 
         return book
+
+
+class FollowersSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    followers = serializers.CharField(read_only=True)
+    book_id = serializers.CharField(read_only=True)
+
+    def get_followers(self, obj: User):
+        print("chegou")
+
+        return obj.followers.all().values("username")

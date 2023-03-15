@@ -4,8 +4,8 @@ from uuid import uuid4
 
 
 class Available(models.TextChoices):
-    DEFAULT = "Disponível"
-    INDISPONIVEL = "Indisponível"
+    DEFAULT = "disponível"
+    INDISPONIVEL = "indisponível"
 
 
 class Genre(models.TextChoices):
