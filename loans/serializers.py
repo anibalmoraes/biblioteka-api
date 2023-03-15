@@ -19,9 +19,10 @@ class LoanSerializer(serializers.ModelSerializer):
             "is_active",
             "username",
         ]
-        read_only_fields = ["id", "estimated_return"]
+        read_only_fields = ["id", "estimated_return", "borrow_date"]
 
     def create(self, validated_data: dict) -> Loan:
+
         loan = Loan.objects.create(**validated_data)
 
         if loan.estimated_return.weekday() == 5:
@@ -36,10 +37,15 @@ class LoanSerializer(serializers.ModelSerializer):
         return loan
 
     def update(self, instance: Loan, validated_data: dict) -> Loan:
-        for key, value in validated_data.items():
-            if key == "devolution_date" > key == "estimated_return":
-                instance["is_active"] = False
-            setattr(instance, key, value)
+        if validated_data["devolution_date"] > instance.estimated_return:
+            instance.user.is_blocked = True
+            instance.user.while_blocked = validated_data["devolution_date"] + timedelta(days=15)
+
+            instance.user.save()
+        instance.is_active = False
+        instance.copy.quantity += 1
+        instance.copy.save()
+        instance.devolution_date = validated_data["devolution_date"]
 
         instance.save()
 
