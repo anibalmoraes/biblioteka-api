@@ -2,18 +2,46 @@ from django.shortcuts import render
 from rest_framework.views import View, Request, Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+    ListAPIView,
+    RetrieveUpdateAPIView
+)
 from .models import Loan
 from .serializers import LoanSerializer
-from .permissions import IsBlocked, IsActive, IsAccountOwner, IsAdmin, IsAdminOrReadOnly, IsDependecies
+from .permissions import (
+    IsBlocked,
+    IsActive,
+    IsAccountOwner,
+    IsAdmin,
+    IsAdminOrReadOnly,
+    IsDependecies,
+)
+from copies.models import Copy
+from django.shortcuts import get_object_or_404, get_list_or_404
+from users.models import User
 
 
 class LoansView(ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsAdminOrReadOnly, IsActive, IsBlocked, IsDependecies]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly, IsActive, IsBlocked]
 
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer
+
+    def perform_create(self, serializer: LoanSerializer):
+        copy = get_object_or_404(Copy, pk=self.kwargs["copy_id"])
+        user = User.objects.get(username=serializer.validated_data.pop("username"))
+
+        serializer.save(copy=copy, user=user)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = get_list_or_404(Loan, copy_id=Copy.id)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)    
+    
+    lookup_url_kwarg = "copy_id"
 
 
 class LoansHistoricView(ListAPIView):
@@ -26,7 +54,7 @@ class LoansHistoricView(ListAPIView):
     lookup_url_kwarg = "user_id"
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object("is_active" == False)
+        instance = get_list_or_404(Loan, is_active=False)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
@@ -39,7 +67,7 @@ class LoansDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = LoanSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object("is_active" == True)
+        instance = get_list_or_404(Loan, is_active=True)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 

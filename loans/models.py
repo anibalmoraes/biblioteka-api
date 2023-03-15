@@ -1,8 +1,8 @@
 from django.db import models
 from uuid import uuid4
 from datetime import datetime, timedelta, date
-from copies.models import Copy
 from users.models import User
+
 # import datetime
 
 
@@ -12,12 +12,12 @@ class Loan(models.Model):
     estimated_return = models.DateField(default=date.today() + timedelta(days=15))
     devolution_date = models.DateField(blank=True, null=True)
     user = models.ForeignKey(
-        User,
+        "users.user",
         on_delete=models.CASCADE,
         related_name="user_loans",
     )
     copy = models.ForeignKey(
-        Copy,
+        "copies.Copy",
         on_delete=models.CASCADE,
         related_name="copies_loans",
     )

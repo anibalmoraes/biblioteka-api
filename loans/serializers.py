@@ -3,31 +3,11 @@ from rest_framework.validators import UniqueValidator
 from .models import Loan
 from datetime import datetime, timedelta, date
 import ipdb
+from users.models import User
 
 
 class LoanSerializer(serializers.ModelSerializer):
-
-    def create(self, validated_data: dict) -> Loan:
-        if (date.today() + timedelta(days=15)).weekday() == 5:
-            Loan["estimated_return"] == date.today() + timedelta(days=17)
-
-        elif (date.today() + timedelta(days=15)).weekday() == 6:
-            Loan["estimated_return"] == date.today() + timedelta(days=16)
-
-        else:
-            Loan["estimated_return"] == date.today() + timedelta(days=15)
-
-        return Loan.objects.create(**validated_data)
-
-    def update(self, instance: Loan, validated_data: dict) -> Loan:
-        for key, value in validated_data.items():
-            if key == "devolution_date" > key == "estimated_return":
-                instance["is_active"] == False
-            setattr(instance, key, value)
-
-        instance.save()
-
-        return instance
+    username = serializers.CharField(write_only=True)
 
     class Meta:
         model = Loan
@@ -37,5 +17,32 @@ class LoanSerializer(serializers.ModelSerializer):
             "estimated_return",
             "devolution_date",
             "is_active",
+            "username",
         ]
         read_only_fields = ["id", "estimated_return", "borrow_date"]
+
+    def create(self, validated_data: dict) -> Loan:
+        loan = Loan.objects.create(**validated_data)
+
+        if loan.estimated_return.weekday() == 5:
+            loan.estimated_return += timedelta(days=2)
+
+        elif loan.estimated_return.weekday() == 6:
+            loan.estimated_return += timedelta(days=1)
+
+        loan.copy.quantity -= 1
+        loan.copy.save()
+
+        return loan
+
+    def update(self, instance: Loan, validated_data: dict) -> Loan:
+        if validated_data["devolution_date"] > instance.estimated_return:
+            instance.user.is_blocked = True
+            instance.user.save()
+        instance.is_active = False
+        instance.copy.quantity += 1
+        instance.copy.save()
+
+        instance.save()
+
+        return instance
