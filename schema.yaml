@@ -1,0 +1,1186 @@
+openapi: 3.0.3
+info:
+  title: BiblioteKA API
+  version: 1.0.0
+  description: Aplicação feita para gerenciar os serviços de uma biblioteca.
+paths:
+  /api/books/:
+    get:
+      operationId: books_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - books
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookList'
+          description: ''
+    post:
+      operationId: books_create
+      tags:
+      - books
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Book'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+  /api/books/{book_id}/copies/:
+    post:
+      operationId: books_copies_create
+      parameters:
+      - in: path
+        name: book_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - books
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Copy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Copy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Copy'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Copy'
+          description: ''
+  /api/books/{id}/:
+    get:
+      operationId: books_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this book.
+        required: true
+      tags:
+      - books
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+    put:
+      operationId: books_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this book.
+        required: true
+      tags:
+      - books
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Book'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+    patch:
+      operationId: books_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this book.
+        required: true
+      tags:
+      - books
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBook'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+    delete:
+      operationId: books_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this book.
+        required: true
+      tags:
+      - books
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/books/{id}/follow/:
+    post:
+      operationId: books_follow_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this book.
+        required: true
+      tags:
+      - books
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Following'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Following'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Following'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Following'
+          description: ''
+  /api/books/{id}/followers/:
+    get:
+      operationId: books_followers_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this book.
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - books
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFollowersList'
+          description: ''
+  /api/copies/:
+    get:
+      operationId: copies_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - copies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCopyList'
+          description: ''
+  /api/copies/{id}/:
+    get:
+      operationId: copies_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this copy.
+        required: true
+      tags:
+      - copies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Copy'
+          description: ''
+    put:
+      operationId: copies_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this copy.
+        required: true
+      tags:
+      - copies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Copy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Copy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Copy'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Copy'
+          description: ''
+    patch:
+      operationId: copies_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this copy.
+        required: true
+      tags:
+      - copies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCopy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCopy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCopy'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Copy'
+          description: ''
+    delete:
+      operationId: copies_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this copy.
+        required: true
+      tags:
+      - copies
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/loans/{copy_id}/:
+    get:
+      operationId: loans_list
+      parameters:
+      - in: path
+        name: copy_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - loans
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLoanList'
+          description: ''
+    post:
+      operationId: loans_create
+      parameters:
+      - in: path
+        name: copy_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Loan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Loan'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/loans/{user_id}/:
+    get:
+      operationId: loans_list_2
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLoanList'
+          description: ''
+  /api/loans/admin/{loan_id}/:
+    get:
+      operationId: loans_admin_retrieve
+      parameters:
+      - in: path
+        name: loan_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+    put:
+      operationId: loans_admin_update
+      parameters:
+      - in: path
+        name: loan_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Loan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Loan'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+    patch:
+      operationId: loans_admin_partial_update
+      parameters:
+      - in: path
+        name: loan_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLoan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLoan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLoan'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+    delete:
+      operationId: loans_admin_destroy
+      parameters:
+      - in: path
+        name: loan_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/:
+    get:
+      operationId: users_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: users_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/{user_id}/:
+    get:
+      operationId: users_retrieve
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/login/:
+    post:
+      operationId: users_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 150
+        author:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        pages:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        genre:
+          $ref: '#/components/schemas/GenreEnum'
+        published_at:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        is_available:
+          $ref: '#/components/schemas/IsAvailableEnum'
+        created_at:
+          type: string
+          format: date
+          readOnly: true
+        quantity:
+          type: string
+          readOnly: true
+      required:
+      - author
+      - created_at
+      - description
+      - genre
+      - id
+      - pages
+      - published_at
+      - quantity
+      - title
+    Copy:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        book:
+          type: string
+          readOnly: true
+      required:
+      - book
+      - id
+      - quantity
+    Followers:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        followers:
+          type: string
+          readOnly: true
+        book_id:
+          type: string
+          readOnly: true
+      required:
+      - book_id
+      - followers
+      - id
+    Following:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        user_id:
+          type: string
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        book_id:
+          type: string
+          readOnly: true
+      required:
+      - book_id
+      - id
+      - user_id
+      - username
+    GenreEnum:
+      enum:
+      - Drama
+      - Romance
+      - Ficção
+      - Não Ficção
+      - Infantil
+      - Terror
+      - Suspense
+      - Ação e aventura
+      type: string
+      description: |-
+        * `Drama` - Drama
+        * `Romance` - Romance
+        * `Ficção` - Fiction
+        * `Não Ficção` - Non Fiction
+        * `Infantil` - Kids
+        * `Terror` - Horror
+        * `Suspense` - Triller
+        * `Ação e aventura` - Action Adventure
+    IsAvailableEnum:
+      enum:
+      - disponível
+      - indisponível
+      type: string
+      description: |-
+        * `disponível` - Default
+        * `indisponível` - Indisponivel
+    Loan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        borrow_date:
+          type: string
+          format: date
+          readOnly: true
+        estimated_return:
+          type: string
+          format: date
+          readOnly: true
+        devolution_date:
+          type: string
+          format: date
+          nullable: true
+        is_active:
+          type: boolean
+        username:
+          type: string
+          writeOnly: true
+      required:
+      - borrow_date
+      - estimated_return
+      - id
+      - username
+    PaginatedBookList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+    PaginatedCopyList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Copy'
+    PaginatedFollowersList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Followers'
+    PaginatedLoanList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Loan'
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedBook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 150
+        author:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        pages:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        genre:
+          $ref: '#/components/schemas/GenreEnum'
+        published_at:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        is_available:
+          $ref: '#/components/schemas/IsAvailableEnum'
+        created_at:
+          type: string
+          format: date
+          readOnly: true
+        quantity:
+          type: string
+          readOnly: true
+    PatchedCopy:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        book:
+          type: string
+          readOnly: true
+    PatchedLoan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        borrow_date:
+          type: string
+          format: date
+          readOnly: true
+        estimated_return:
+          type: string
+          format: date
+          readOnly: true
+        devolution_date:
+          type: string
+          format: date
+          nullable: true
+        is_active:
+          type: boolean
+        username:
+          type: string
+          writeOnly: true
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        user_type:
+          allOf:
+          - $ref: '#/components/schemas/UserTypeEnum'
+          default: Estudante
+        is_active:
+          type: boolean
+        is_blocked:
+          type: boolean
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        user_type:
+          allOf:
+          - $ref: '#/components/schemas/UserTypeEnum'
+          default: Estudante
+        is_active:
+          type: boolean
+        is_blocked:
+          type: boolean
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+      required:
+      - email
+      - first_name
+      - id
+      - is_superuser
+      - last_name
+      - password
+      - username
+    UserTypeEnum:
+      enum:
+      - Estudante
+      - Colaborador
+      type: string
+      description: |-
+        * `Estudante` - Default
+        * `Colaborador` - Collaborator
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
