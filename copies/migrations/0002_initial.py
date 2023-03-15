@@ -8,16 +8,19 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("books", "0001_initial"),
+        ("loans", "0001_initial"),
+        ("copies", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="book",
-            name="following",
+            model_name="copy",
+            name="copies_users",
             field=models.ManyToManyField(
-                related_name="followers", to=settings.AUTH_USER_MODEL
+                related_name="copies_users",
+                through="loans.Loan",
+                to=settings.AUTH_USER_MODEL,
             ),
         ),
     ]
