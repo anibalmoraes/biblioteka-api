@@ -220,34 +220,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Following'
           description: ''
-  /api/books/{id}/followers/:
-    get:
-      operationId: books_followers_list
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this book.
-        required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      tags:
-      - books
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedFollowersList'
-          description: ''
   /api/copies/:
     get:
       operationId: copies_list
@@ -373,92 +345,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/loans/{copy_id}/:
-    get:
-      operationId: loans_list
-      parameters:
-      - in: path
-        name: copy_id
-        schema:
-          type: string
-          format: uuid
-        required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      tags:
-      - loans
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedLoanList'
-          description: ''
-    post:
-      operationId: loans_create
-      parameters:
-      - in: path
-        name: copy_id
-        schema:
-          type: string
-          format: uuid
-        required: true
-      tags:
-      - loans
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Loan'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Loan'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Loan'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Loan'
-          description: ''
-  /api/loans/{user_id}/:
-    get:
-      operationId: loans_list_2
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - in: path
-        name: user_id
-        schema:
-          type: string
-          format: uuid
-        required: true
-      tags:
-      - loans
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedLoanList'
-          description: ''
   /api/loans/admin/{loan_id}/:
     get:
       operationId: loans_admin_retrieve
@@ -559,6 +445,119 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/loans/copies/{copy_id}/:
+    get:
+      operationId: loans_copies_list
+      parameters:
+      - in: path
+        name: copy_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - loans
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLoanList'
+          description: ''
+    post:
+      operationId: loans_copies_create
+      parameters:
+      - in: path
+        name: copy_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Loan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Loan'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/loans/students/{user_id}/:
+    get:
+      operationId: loans_students_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLoanList'
+          description: ''
+  /api/loans/user/{user_id}/:
+    get:
+      operationId: loans_user_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - loans
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLoanList'
+          description: ''
   /api/users/:
     get:
       operationId: users_list
@@ -767,6 +766,11 @@ components:
           type: string
           format: date
           readOnly: true
+        following:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
         quantity:
           type: string
           readOnly: true
@@ -774,6 +778,7 @@ components:
       - author
       - created_at
       - description
+      - following
       - genre
       - id
       - pages
@@ -798,22 +803,6 @@ components:
       - book
       - id
       - quantity
-    Followers:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        followers:
-          type: string
-          readOnly: true
-        book_id:
-          type: string
-          readOnly: true
-      required:
-      - book_id
-      - followers
-      - id
     Following:
       type: object
       properties:
@@ -891,6 +880,76 @@ components:
       - estimated_return
       - id
       - username
+    Nested:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        date_joined:
+          type: string
+          format: date-time
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 127
+        user_type:
+          $ref: '#/components/schemas/UserTypeEnum'
+        is_active:
+          type: boolean
+        is_blocked:
+          type: boolean
+        while_blocked:
+          type: string
+          format: date
+          nullable: true
+        groups:
+          type: array
+          items:
+            type: integer
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+        user_permissions:
+          type: array
+          items:
+            type: integer
+          description: Specific permissions for this user.
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - username
     PaginatedBookList:
       type: object
       properties:
@@ -931,26 +990,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Copy'
-    PaginatedFollowersList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Followers'
     PaginatedLoanList:
       type: object
       properties:
@@ -1021,6 +1060,11 @@ components:
         created_at:
           type: string
           format: date
+          readOnly: true
+        following:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
           readOnly: true
         quantity:
           type: string
