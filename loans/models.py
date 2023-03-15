@@ -1,6 +1,8 @@
 from django.db import models
 from uuid import uuid4
 from datetime import datetime, timedelta, date
+from users.models import User
+
 # import datetime
 
 
@@ -10,7 +12,7 @@ class Loan(models.Model):
     estimated_return = models.DateField(default=date.today() + timedelta(days=15))
     devolution_date = models.DateField(blank=True, null=True)
     user = models.ForeignKey(
-        "users.User",
+        "users.user",
         on_delete=models.CASCADE,
         related_name="user_loans",
     )

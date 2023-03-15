@@ -20,11 +20,11 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 class IsActive(permissions.BasePermission):
     def has_permission(self, request, view: View) -> bool:
-        return request.data.is_active or request.user.is_superuser
+        return request.user.is_active or request.user.is_superuser
 
 
 class IsAccountOwner(permissions.BasePermission):
-    def has_object_permission(self, request, view: View, obj: User) -> bool:
+    def has_object_permission(self, request, view: View, obj) -> bool:
         return obj == request.user or request.user.is_superuser
 
 
