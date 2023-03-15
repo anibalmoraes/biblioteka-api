@@ -31,7 +31,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
 DEBUG = os.getenv("DEBUG", False)
 
 ALLOWED_HOSTS = []
@@ -54,6 +53,7 @@ MY_APPS = [
     "books",
     "copies",
     "users",
+    "loans",
 ]
 
 THIRD_PARTY_APPS = [
@@ -105,7 +105,7 @@ DATABASES = {
         "USER": os.getenv("PG_USER"),
         "PASSWORD": os.getenv("PG_PASSWORD"),
         "HOST": os.getenv("PG_HOST"),
-        "PORT": os.getenv("PORT") or 5432,
+        "PORT": os.getenv("PORT"),
     }
 }
 

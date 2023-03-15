@@ -18,6 +18,7 @@ class User(AbstractUser):
     )
     is_active = models.BooleanField(default=True)
     is_blocked = models.BooleanField(default=False)
+    while_blocked = models.DateField(null=True)
 
     def __repr__(self) -> str:
         return f"<User ({self.first_name} - {self.user_type} - {self.is_blocked})>"
