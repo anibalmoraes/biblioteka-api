@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Copy, Loan
+from .models import Copy
 
 
 class CopySerializer(serializers.ModelSerializer):
@@ -11,10 +11,10 @@ class CopySerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
     def create(self, validated_data: dict) -> Copy:
-        copy = Copy.objects.filter(book=validated_data['book']).first()
+        copy = Copy.objects.filter(book=validated_data["book"]).first()
 
         if copy:
-            copy.quantity = copy.quantity + validated_data['quantity']
+            copy.quantity = copy.quantity + validated_data["quantity"]
             copy.save()
 
             return copy
@@ -31,18 +31,3 @@ class CopySerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
-
-# class LoanSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Loan
-#         fields = [
-#             "id",
-#             "borrow_date",
-#             "estimated_return",
-#             "devolution_date"
-#         ]
-#         read_only_fields = ["id", "estimated_return"]
-
-#     def create(self, validated_data: dict) -> Loan:
-#         return Loan.objects.create(**validated_data)

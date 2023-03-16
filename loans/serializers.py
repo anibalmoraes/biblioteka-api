@@ -1,9 +1,6 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from .models import Loan
-from datetime import datetime, timedelta, date
-import ipdb
-from users.models import User
+from datetime import timedelta
 
 
 class LoanSerializer(serializers.ModelSerializer):
@@ -22,7 +19,6 @@ class LoanSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "estimated_return", "borrow_date"]
 
     def create(self, validated_data: dict) -> Loan:
-
         loan = Loan.objects.create(**validated_data)
 
         if loan.estimated_return.weekday() == 5:
@@ -39,7 +35,9 @@ class LoanSerializer(serializers.ModelSerializer):
     def update(self, instance: Loan, validated_data: dict) -> Loan:
         if validated_data["devolution_date"] > instance.estimated_return:
             instance.user.is_blocked = True
-            instance.user.while_blocked = validated_data["devolution_date"] + timedelta(days=15)
+            instance.user.while_blocked = validated_data["devolution_date"] + timedelta(
+                days=15
+            )
 
             instance.user.save()
         instance.is_active = False

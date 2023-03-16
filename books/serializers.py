@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from .models import Book, Genre
-from users.models import User
 from copies.models import Copy
 from django.db.models import Sum
 from django.core.mail import send_mail
