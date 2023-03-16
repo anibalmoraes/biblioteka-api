@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import (
@@ -14,7 +13,7 @@ from .permissions import (
     IsAdminOrReadOnly,
 )
 from copies.models import Copy
-from django.shortcuts import get_object_or_404, get_list_or_404
+from django.shortcuts import get_object_or_404
 from users.models import User
 from rest_framework.exceptions import APIException
 from datetime import date
