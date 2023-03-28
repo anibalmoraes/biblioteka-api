@@ -1,23 +1,17 @@
-# biblioteka-api
+# Biblioteka API
 
-1. Crie seu ambiente virtual:
+A <strong>Biblioteka API</strong> tem como objetivo ser uma ferramenta de emprestimo de livros, trazendo facilidade e controle para o estabelecimento. <br><br>
+Projeto desenvolvido em Fev/23.<br><br>
 
-```bash
-python -m venv venv
-```
+### Documentação API:
+https://biblioteka-api-6gsk.onrender.com/api/docs/swagger/ <br><br>
 
-2. Ative seu venv:
+### Deploy API:
+https://biblioteka-api-6gsk.onrender.com/ <br><br>
 
-```bash
-# linux:
-source venv/bin/activate
-
-# windows:
-.\venv\Scripts\activate
-```
-
-3. Instale as dependências
-
-```
-pip install -r requirements.txt
-```
+### Tecnologias/libs utilizadas:
+ 1. Python;
+ 2. Django;
+ 3. PostgreSQL;
+ 4. Django REST framework;
+<br><br><br>
